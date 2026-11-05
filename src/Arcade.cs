@@ -164,6 +164,14 @@ namespace CustomWidgets
             dc.Pop();
         }
 
+        /// <summary>Draws the sprite resized, for things that get nearer or farther away.</summary>
+        public void Draw(DrawingContext dc, double x, double y, double scale, Brush brush)
+        {
+            dc.PushTransform(new MatrixTransform(scale, 0, 0, scale, x, y));
+            dc.DrawGeometry(brush, null, geometry);
+            dc.Pop();
+        }
+
         /// <summary>The same picture facing the other way.</summary>
         public static ArcadeSprite Flipped(params string[] rows)
         {
@@ -209,7 +217,8 @@ namespace CustomWidgets
         {
             new MenuEntry { Title = "INVADERS", Id = "invaders", Make = seed => new InvadersGame(seed) },
             new MenuEntry { Title = "DEFENDER", Id = "defender", Make = seed => new DefenderGame(seed) },
-            new MenuEntry { Title = "CATERPILLAR", Id = "caterpillar", Make = seed => new CaterpillarGame(seed) }
+            new MenuEntry { Title = "CATERPILLAR", Id = "caterpillar", Make = seed => new CaterpillarGame(seed) },
+            new MenuEntry { Title = "POLE POSITION", Id = "pole", Make = seed => new PolePositionGame(seed) }
         };
 
         readonly ArcadeInput input = new ArcadeInput();
@@ -406,7 +415,7 @@ namespace CustomWidgets
 
         void DrawMenu(DrawingContext dc)
         {
-            const double Center = ArcadeGame.ViewWidth / 2, Left = 32, Right = 168, RowHeight = 18, FirstRow = 52;
+            const double Center = ArcadeGame.ViewWidth / 2, Left = 32, Right = 174, RowHeight = 16, FirstRow = 46;
             text.Draw(dc, "MINI ARCADE", Center, 14, 18, ArcadePalette.Green, TextAlign.Center);
             for (int i = 0; i < Menu.Length; i++)
             {

@@ -88,7 +88,7 @@ Your own widgets can bind to `Pihole.Status`, `Pihole.StatusDetail`, `Pihole.Sta
 ### Mini arcade
 
 `widgets\arcade.xaml` appears at the bottom centre of the screen, always on top. Click the game screen,
-choose a game with the up and down arrows, and press Space. It has Invaders, Defender and Caterpillar.
+choose a game with the up and down arrows, and press Space. It has Invaders, Defender, Caterpillar and Pole Position.
 
 The arrow keys or WASD move, Space fires, P or Esc pauses, and M returns to the game list. Clicking
 anywhere else pauses the game and gives your keyboard back. The game loop only runs while you play,
@@ -100,6 +100,9 @@ so an idle arcade uses no CPU. High scores are saved in `state.ini`.
   lander, then catch the falling human. A long fall kills them.
 - **Caterpillar:** shoot the caterpillar as it winds through the mushrooms. Each segment you hit leaves a
   mushroom and can split it in two. A spider roams near the bottom, and you earn an extra life every 10,000 points.
+- **Pole Position:** up accelerates, down brakes, and Space shifts between low and high gear, so shift to high
+  at about 150 km/h. A qualifying lap sets your place on the grid, then you race seven rivals over three laps.
+  Finishing a lap adds time, and hitting a car or a roadside sign costs you speed and time.
 
 To change its size, edit `Width` and `Height` in the XAML; keep a 4:3 ratio, and whole multiples of 200 by
 150 keep the pixels even. To stop it sitting on top, right-click it and choose a different layer. Drag the
