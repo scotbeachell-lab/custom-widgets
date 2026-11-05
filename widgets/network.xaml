@@ -1,0 +1,152 @@
+<!-- Advanced network monitor. Every value comes from {Binding Net.Something}; see the README. -->
+<Border xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        Style="{StaticResource Card}" Width="332">
+  <StackPanel>
+
+    <!-- Overall health -->
+    <DockPanel>
+      <Ellipse DockPanel.Dock="Left" Width="10" Height="10" Margin="0,0,8,0" VerticalAlignment="Center"
+               Fill="{Binding Net.HealthBrush}"/>
+      <TextBlock DockPanel.Dock="Right" Style="{StaticResource Muted}" VerticalAlignment="Center">
+        <Run Text="{Binding Net.AdapterType, Mode=OneWay}"/>
+        <Run Text="{Binding Net.LinkSpeed, Mode=OneWay}"/>
+      </TextBlock>
+      <TextBlock Style="{StaticResource Text}" FontSize="15" FontWeight="SemiBold" Text="{Binding Net.Health}"/>
+    </DockPanel>
+    <TextBlock Style="{StaticResource Muted}" Margin="18,2,0,12" TextWrapping="Wrap" Text="{Binding Net.HealthDetail}"/>
+
+    <!-- Live speed -->
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+      </Grid.ColumnDefinitions>
+      <StackPanel>
+        <TextBlock Style="{StaticResource Muted}">
+          <Run Text="&#x2193;" Foreground="{StaticResource AccentBrush}"/> Download
+        </TextBlock>
+        <TextBlock Style="{StaticResource Text}" FontSize="24" FontFamily="{StaticResource DisplayFont}" Text="{Binding Net.Down}"/>
+      </StackPanel>
+      <StackPanel Grid.Column="1">
+        <TextBlock Style="{StaticResource Muted}">
+          <Run Text="&#x2191;" Foreground="{StaticResource Accent2Brush}"/> Upload
+        </TextBlock>
+        <TextBlock Style="{StaticResource Text}" FontSize="24" FontFamily="{StaticResource DisplayFont}" Text="{Binding Net.Up}"/>
+      </StackPanel>
+    </Grid>
+
+    <!-- Traffic over the last 2 minutes. DownPoints and UpPoints: x 0 to 298, y 0 to 70. -->
+    <Grid Height="70" Margin="0,10,0,4">
+      <Border VerticalAlignment="Top" Height="1" Background="{StaticResource HoverBrush}"/>
+      <Border VerticalAlignment="Center" Height="1" Background="{StaticResource HoverBrush}"/>
+      <Border VerticalAlignment="Bottom" Height="1" Background="{StaticResource HoverBrush}"/>
+      <Polygon Points="{Binding Net.DownPoints}" Fill="#558FA8FF" Stroke="{StaticResource AccentBrush}" StrokeThickness="1"/>
+      <Polygon Points="{Binding Net.UpPoints}" Fill="#55FFB27A" Stroke="{StaticResource Accent2Brush}" StrokeThickness="1"/>
+      <TextBlock Style="{StaticResource Muted}" FontSize="10" HorizontalAlignment="Right" Margin="0,2,0,0" Text="{Binding Net.GraphScale}"/>
+    </Grid>
+    <TextBlock Style="{StaticResource Muted}" FontSize="10" Text="Last 2 minutes" Margin="0,0,0,10"/>
+
+    <!-- Totals -->
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="72"/>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="20"/>
+        <RowDefinition Height="20"/>
+        <RowDefinition Height="20"/>
+      </Grid.RowDefinitions>
+      <TextBlock Style="{StaticResource Muted}" Text="Peak"/>
+      <TextBlock Style="{StaticResource Text}" Grid.Column="1" Text="{Binding Net.PeakDown}"/>
+      <TextBlock Style="{StaticResource Text}" Grid.Column="2" Text="{Binding Net.PeakUp}"/>
+      <TextBlock Style="{StaticResource Muted}" Grid.Row="1" Text="This run"/>
+      <TextBlock Style="{StaticResource Text}" Grid.Row="1" Grid.Column="1" Text="{Binding Net.SessionDown}"/>
+      <TextBlock Style="{StaticResource Text}" Grid.Row="1" Grid.Column="2" Text="{Binding Net.SessionUp}"/>
+      <TextBlock Style="{StaticResource Muted}" Grid.Row="2" Text="Today"/>
+      <TextBlock Style="{StaticResource Text}" Grid.Row="2" Grid.Column="1" Text="{Binding Net.TodayDown}"/>
+      <TextBlock Style="{StaticResource Text}" Grid.Row="2" Grid.Column="2" Text="{Binding Net.TodayUp}"/>
+    </Grid>
+
+    <Border Height="1" Margin="0,10" Background="{StaticResource HoverBrush}"/>
+
+    <!-- Latency: router versus internet shows where a problem is -->
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+      </Grid.ColumnDefinitions>
+      <StackPanel>
+        <TextBlock Style="{StaticResource Muted}" Text="Router"/>
+        <TextBlock Style="{StaticResource Text}" Foreground="{StaticResource Accent2Brush}" Text="{Binding Net.GatewayPing}"/>
+      </StackPanel>
+      <StackPanel Grid.Column="1" ToolTip="{Binding Net.PingTarget}">
+        <TextBlock Style="{StaticResource Muted}" Text="Internet"/>
+        <TextBlock Style="{StaticResource Text}" Foreground="{StaticResource AccentBrush}" Text="{Binding Net.InternetPing}"/>
+      </StackPanel>
+      <StackPanel Grid.Column="2">
+        <TextBlock Style="{StaticResource Muted}" Text="Jitter"/>
+        <TextBlock Style="{StaticResource Text}" Text="{Binding Net.Jitter}"/>
+      </StackPanel>
+      <StackPanel Grid.Column="3">
+        <TextBlock Style="{StaticResource Muted}" Text="Loss"/>
+        <TextBlock Style="{StaticResource Text}" Text="{Binding Net.Loss}"/>
+      </StackPanel>
+    </Grid>
+    <Grid Height="28" Margin="0,8,0,0">
+      <Polyline Points="{Binding Net.GatewayPoints}" Stroke="{StaticResource Accent2Brush}" StrokeThickness="1.25" StrokeLineJoin="Round"/>
+      <Polyline Points="{Binding Net.InternetPoints}" Stroke="{StaticResource AccentBrush}" StrokeThickness="1.25" StrokeLineJoin="Round"/>
+    </Grid>
+
+    <Border Height="1" Margin="0,10" Background="{StaticResource HoverBrush}"/>
+
+    <!-- Which apps hold connections -->
+    <DockPanel Margin="0,0,0,6">
+      <TextBlock Style="{StaticResource Muted}" Text="Apps by open connections"/>
+      <TextBlock Style="{StaticResource Text}" HorizontalAlignment="Right" Text="{Binding Net.Established}"/>
+    </DockPanel>
+    <ItemsControl ItemsSource="{Binding Net.TopApps}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <DockPanel Height="19">
+            <TextBlock DockPanel.Dock="Right" Style="{StaticResource Muted}" Text="{Binding Count}"/>
+            <TextBlock Style="{StaticResource Text}" TextTrimming="CharacterEllipsis" Text="{Binding Name}"/>
+          </DockPanel>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+
+    <Border Height="1" Margin="0,10" Background="{StaticResource HoverBrush}"/>
+
+    <!-- Connection details -->
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="20"/>
+        <RowDefinition Height="20"/>
+        <RowDefinition Height="20"/>
+      </Grid.RowDefinitions>
+      <TextBlock Style="{StaticResource Muted}" Grid.ColumnSpan="2" TextTrimming="CharacterEllipsis">
+        Adapter <Run Foreground="{StaticResource TextBrush}" Text="{Binding Net.Adapter, Mode=OneWay}"/>
+      </TextBlock>
+      <TextBlock Style="{StaticResource Muted}" Grid.Row="1">
+        IP <Run Foreground="{StaticResource TextBrush}" Text="{Binding Net.LocalIp, Mode=OneWay}"/>
+      </TextBlock>
+      <TextBlock Style="{StaticResource Muted}" Grid.Row="1" Grid.Column="1">
+        Router <Run Foreground="{StaticResource TextBrush}" Text="{Binding Net.Gateway, Mode=OneWay}"/>
+      </TextBlock>
+      <TextBlock Style="{StaticResource Muted}" Grid.Row="2">
+        DNS <Run Foreground="{StaticResource TextBrush}" Text="{Binding Net.Dns, Mode=OneWay}"/>
+      </TextBlock>
+      <TextBlock Style="{StaticResource Muted}" Grid.Row="2" Grid.Column="1">
+        Bad packets <Run Foreground="{StaticResource TextBrush}" Text="{Binding Net.PacketProblems, Mode=OneWay}"/>
+      </TextBlock>
+    </Grid>
+  </StackPanel>
+</Border>

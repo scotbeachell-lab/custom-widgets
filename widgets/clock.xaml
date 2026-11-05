@@ -1,0 +1,14 @@
+<!-- No card at all: just text floating on the desktop.
+     The nearly invisible background keeps the whole area draggable, because
+     fully transparent pixels let mouse clicks through to whatever is behind. -->
+<Grid xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Background="#01000000">
+  <StackPanel Margin="16,4,16,12">
+    <StackPanel.Effect>
+      <DropShadowEffect BlurRadius="12" ShadowDepth="1" Opacity="0.7"/>
+    </StackPanel.Effect>
+    <TextBlock Style="{StaticResource Display}" HorizontalAlignment="Right"
+               Text="{Binding Now, StringFormat=HH:mm}"/>
+    <TextBlock Style="{StaticResource Text}" FontSize="16" HorizontalAlignment="Right" Margin="0,-6,4,0"
+               Text="{Binding Now, StringFormat='dddd, MMMM d'}"/>
+  </StackPanel>
+</Grid>

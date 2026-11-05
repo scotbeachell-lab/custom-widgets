@@ -1,0 +1,7 @@
+# Built by build.cmd
+*.exe
+
+# Personal data created while running: settings, network usage, notes and logs
+state.ini
+notes/
+error.log

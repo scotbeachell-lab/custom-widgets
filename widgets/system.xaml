@@ -1,0 +1,43 @@
+<Border xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        Style="{StaticResource Card}" Width="268">
+  <StackPanel>
+    <DockPanel>
+      <TextBlock Style="{StaticResource Muted}" Text="CPU"/>
+      <TextBlock Style="{StaticResource Text}" HorizontalAlignment="Right"
+                 Text="{Binding Cpu, StringFormat={}{0:0}%}"/>
+    </DockPanel>
+    <!-- CpuPoints holds the last 60 seconds: x runs 0 to 236, y runs 0 to 40. -->
+    <Polyline Margin="0,6,0,12" Height="40" Stroke="{StaticResource AccentBrush}" StrokeThickness="1.5"
+              StrokeLineJoin="Round" Points="{Binding CpuPoints}"/>
+
+    <DockPanel>
+      <TextBlock Style="{StaticResource Muted}" Text="Memory"/>
+      <TextBlock Style="{StaticResource Text}" HorizontalAlignment="Right">
+        <TextBlock.Text>
+          <MultiBinding StringFormat="{}{0:0.0} / {1:0} GB">
+            <Binding Path="RamUsedGb"/>
+            <Binding Path="RamTotalGb"/>
+          </MultiBinding>
+        </TextBlock.Text>
+      </TextBlock>
+    </DockPanel>
+    <ProgressBar Style="{StaticResource Meter}" Margin="0,6,0,12" Value="{Binding Ram, Mode=OneWay}"/>
+
+    <DockPanel>
+      <TextBlock Style="{StaticResource Muted}" Text="System disk"/>
+      <TextBlock Style="{StaticResource Text}" HorizontalAlignment="Right"
+                 Text="{Binding DiskFreeGb, StringFormat={}{0:0} GB free}"/>
+    </DockPanel>
+    <ProgressBar Style="{StaticResource Meter}" Margin="0,6,0,12" Value="{Binding Disk, Mode=OneWay}"/>
+
+    <DockPanel>
+      <TextBlock Style="{StaticResource Muted}" Text="Network"/>
+      <TextBlock Style="{StaticResource Text}" HorizontalAlignment="Right">
+        <Run Text="&#x2193;" Foreground="{StaticResource AccentBrush}"/>
+        <Run Text="{Binding NetDown, Mode=OneWay}"/>
+        <Run Text="  &#x2191;" Foreground="{StaticResource AccentBrush}"/>
+        <Run Text="{Binding NetUp, Mode=OneWay}"/>
+      </TextBlock>
+    </DockPanel>
+  </StackPanel>
+</Border>

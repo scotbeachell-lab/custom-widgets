@@ -1,0 +1,11 @@
+<!-- Notes[quick] is saved to notes\quick.txt as you type. Use another name for a second note. -->
+<Border xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        Style="{StaticResource Card}" Width="264">
+  <StackPanel>
+    <TextBlock Style="{StaticResource Muted}" Text="Notes" Margin="0,0,0,8"/>
+    <TextBox Height="96" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+             Background="Transparent" BorderThickness="0" FontSize="13" FontFamily="{StaticResource TextFont}"
+             Foreground="{StaticResource TextBrush}" CaretBrush="{StaticResource AccentBrush}"
+             Text="{Binding Notes[quick], UpdateSourceTrigger=PropertyChanged}"/>
+  </StackPanel>
+</Border>

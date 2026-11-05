@@ -1,0 +1,17 @@
+<!-- CommandParameter can be a program, file, folder, URL or ms-settings: page.
+     To pass arguments use "program|arguments". Icons: search "Segoe Fluent Icons" for the codes. -->
+<Border xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        Style="{StaticResource Card}" Padding="6">
+  <StackPanel Orientation="Horizontal">
+    <Button Style="{StaticResource IconButton}" Content="&#xE8B7;" ToolTip="File Explorer"
+            Command="{Binding Run}" CommandParameter="explorer.exe"/>
+    <Button Style="{StaticResource IconButton}" Content="&#xE70F;" ToolTip="Notepad"
+            Command="{Binding Run}" CommandParameter="notepad.exe"/>
+    <Button Style="{StaticResource IconButton}" Content="&#xE8EF;" ToolTip="Calculator"
+            Command="{Binding Run}" CommandParameter="calc.exe"/>
+    <Button Style="{StaticResource IconButton}" Content="&#xE9D9;" ToolTip="Task Manager"
+            Command="{Binding Run}" CommandParameter="taskmgr.exe"/>
+    <Button Style="{StaticResource IconButton}" Content="&#xE713;" ToolTip="Settings"
+            Command="{Binding Run}" CommandParameter="ms-settings:"/>
+  </StackPanel>
+</Border>
