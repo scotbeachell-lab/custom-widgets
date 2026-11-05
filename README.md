@@ -115,3 +115,7 @@ in `src\Arcade.cs`, and run `build.cmd`.
 - Fully transparent pixels let clicks through. To make an empty area draggable, give it the
   background `#01000000`, as `clock.xaml` does.
 - Problems are written to `error.log`.
+
+## Licence
+
+MIT. See [LICENSE](LICENSE).
