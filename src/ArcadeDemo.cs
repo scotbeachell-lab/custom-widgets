@@ -88,7 +88,7 @@ namespace CustomWidgets
 
             message = "WELCOME TO THE MINI ARCADE ... " + string.Join(" * ", gameTitles) +
                       " ... PICK A GAME AND PRESS SPACE ... " +
-                      (HasArt ? "SPRITES BY UNTIED GAMES ... " : "") +
+                      (HasArt ? "PIXEL ART BY WILL TICE / UNTIED GAMES ... " : "") +
                       "NOW SCROLLING ON A DESKTOP NEAR YOU ...      ";
         }
 

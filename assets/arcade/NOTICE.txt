@@ -1,0 +1,14 @@
+The art in this folder is NOT covered by this project's MIT licence.
+
+Art: Super Pixel Objects and Items
+By: Will Tice / unTied Games
+Pack: https://untiedgames.itch.io/super-pixel-objects-and-items
+Licence: Will's Public License for Using This Product
+         https://untiedgames.com/files/license.txt
+
+This folder holds only the sprites that the Mini Arcade's demo uses, shared as part of this application
+under that licence. The sprites have been copied from the pack's sheet onto a smaller sheet and rearranged.
+The artwork itself has not been changed.
+
+If you want to use this art in your own project, please get the pack from the link above.
+The licence does not allow it to be used as AI training data.

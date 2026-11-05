@@ -108,9 +108,7 @@ The game list has a demo running behind it: stars, drifting items, a wave of coi
 moves while the mouse is over the arcade or it has your keyboard, and stands still otherwise so that it doesn't
 use CPU. To change that, exit from the tray and add `arcade.demo=always` or `arcade.demo=off` to `state.ini`.
 
-The demo's art isn't in this repository, and it shows simple shapes without it. To use the art, get
-[Super Pixel Objects and Items](https://untiedgames.com) by unTied Games, then copy `spritesheet.png` and
-`spritesheet.txt` from its `spritesheet` folder into `assets\arcade`, which Git ignores.
+The demo's sprites are in `assets\arcade`, and it shows simple shapes if that folder is missing.
 
 To change its size, edit `Width` and `Height` in the XAML; keep a 4:3 ratio, and whole multiples of 200 by
 150 keep the pixels even. To stop it sitting on top, right-click it and choose a different layer. Drag the
@@ -129,4 +127,10 @@ in `src\Arcade.cs`, and run `build.cmd`.
 
 ## Licence
 
-MIT. See [LICENSE](LICENSE).
+The code is MIT. See [LICENSE](LICENSE).
+
+The art in `assets\arcade` is not covered by the MIT licence. It is from
+[Super Pixel Objects and Items](https://untiedgames.itch.io/super-pixel-objects-and-items) by Will Tice /
+unTied Games, shared as part of this application under
+[its own licence](https://untiedgames.com/files/license.txt). See
+[NOTICE.txt](assets/arcade/NOTICE.txt) before reusing it.
