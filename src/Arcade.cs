@@ -121,7 +121,7 @@ namespace CustomWidgets
     /// <summary>Draws text, reusing layouts because a game draws the same strings every frame.</summary>
     public class ArcadeText
     {
-        const int MaxCached = 200;
+        const int MaxCached = 1000;
         static readonly Typeface Face = new Typeface("Consolas");
         readonly Dictionary<string, FormattedText> cache = new Dictionary<string, FormattedText>();
         readonly double pixelsPerDip;
@@ -206,6 +206,9 @@ namespace CustomWidgets
         const double StepSeconds = 1.0 / 60;
         const double LongestFrame = 0.1;
 
+        // The arcade.demo setting: when the demo behind the game list moves.
+        const string DemoWhenInUse = "hover", DemoAlways = "always", DemoOff = "off";
+
         class MenuEntry
         {
             public string Title, Id;
@@ -224,6 +227,8 @@ namespace CustomWidgets
         readonly ArcadeInput input = new ArcadeInput();
         readonly Stopwatch clock = new Stopwatch();
         ArcadeGame game; // null while the picker is showing
+        ArcadeDemo demo;
+        string demoMode = DemoWhenInUse;
         ArcadeText text;
         Settings settings;
         int selected;
@@ -236,6 +241,7 @@ namespace CustomWidgets
             FocusVisualStyle = null;
             ClipToBounds = true;
             RenderOptions.SetEdgeMode(this, EdgeMode.Aliased);
+            RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.NearestNeighbor); // keeps pixel art crisp
             Cursor = Cursors.Hand;
             Loaded += OnLoaded;
             Unloaded += delegate { SetLooping(false); };
@@ -246,6 +252,13 @@ namespace CustomWidgets
         {
             var data = DataContext as LiveData;
             if (data != null) settings = data.Settings;
+            if (settings != null) demoMode = settings.Get("arcade.demo", DemoWhenInUse);
+            if (demo == null)
+            {
+                string art = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "assets", "arcade");
+                demo = new ArcadeDemo(art, Menu.Select(m => m.Title), Environment.TickCount);
+            }
+            UpdateLoop();
             InvalidateVisual();
         }
 
@@ -365,7 +378,32 @@ namespace CustomWidgets
             InvalidateVisual();
         }
 
-        void UpdateLoop() { SetLooping(game != null && IsKeyboardFocused && IsVisible && !paused); }
+        protected override void OnMouseEnter(MouseEventArgs e)
+        {
+            base.OnMouseEnter(e);
+            UpdateLoop();
+        }
+
+        protected override void OnMouseLeave(MouseEventArgs e)
+        {
+            base.OnMouseLeave(e);
+            UpdateLoop();
+        }
+
+        void UpdateLoop()
+        {
+            bool running = game != null ? IsKeyboardFocused && !paused : DemoShouldRun;
+            SetLooping(running && IsVisible);
+        }
+
+        bool DemoShouldRun
+        {
+            get
+            {
+                if (demo == null || demoMode == DemoOff) return false;
+                return demoMode == DemoAlways || IsKeyboardFocused || IsMouseOver;
+            }
+        }
 
         void SetLooping(bool on)
         {
@@ -385,6 +423,12 @@ namespace CustomWidgets
             double elapsed = clock.Elapsed.TotalSeconds;
             if (elapsed < 0.001) return; // WPF can raise this more than once per frame
             clock.Restart();
+            if (game == null)
+            {
+                demo.Update(Math.Min(elapsed, LongestFrame));
+                InvalidateVisual();
+                return;
+            }
             pending += Math.Min(elapsed, LongestFrame);
             while (pending >= StepSeconds)
             {
@@ -405,7 +449,7 @@ namespace CustomWidgets
             dc.PushTransform(new ScaleTransform(scale, scale));
             if (game != null) game.Draw(dc, text);
             else DrawMenu(dc);
-            if (!IsKeyboardFocused || paused)
+            if (game != null && (!IsKeyboardFocused || paused))
             {
                 dc.DrawRectangle(ArcadePalette.Dim, null, new Rect(0, 0, W, H));
                 text.Draw(dc, IsKeyboardFocused ? "PAUSED" : "CLICK TO PLAY", W / 2, H / 2 - 6, 11, ArcadePalette.White, TextAlign.Center);
@@ -415,8 +459,15 @@ namespace CustomWidgets
 
         void DrawMenu(DrawingContext dc)
         {
-            const double Center = ArcadeGame.ViewWidth / 2, Left = 32, Right = 174, RowHeight = 16, FirstRow = 46;
-            text.Draw(dc, "MINI ARCADE", Center, 14, 18, ArcadePalette.Green, TextAlign.Center);
+            const double Center = ArcadeGame.ViewWidth / 2, Left = 32, Right = 174, RowHeight = 15, FirstRow = 36;
+            if (demo != null)
+            {
+                demo.DrawBackground(dc);
+                demo.DrawTitle(dc, text, "MINI ARCADE");
+            }
+            else text.Draw(dc, "MINI ARCADE", Center, 5, 18, ArcadePalette.Green, TextAlign.Center);
+
+            dc.DrawRectangle(ArcadePalette.Dim, null, new Rect(Left - 14, FirstRow - 4, Right - Left + 22, RowHeight * Menu.Length + 22));
             for (int i = 0; i < Menu.Length; i++)
             {
                 double y = FirstRow + i * RowHeight;
@@ -426,8 +477,11 @@ namespace CustomWidgets
                 text.Draw(dc, Menu[i].Title, Left, y, 10, brush, TextAlign.Left);
                 text.Draw(dc, LoadHighScore(Menu[i].Id).ToString("00000"), Right, y, 10, ArcadePalette.Grey, TextAlign.Right);
             }
-            text.Draw(dc, "UP / DOWN TO CHOOSE", Center, 118, 8, ArcadePalette.Grey, TextAlign.Center);
-            text.Draw(dc, "SPACE TO SELECT", Center, 129, 8, ArcadePalette.White, TextAlign.Center);
+            double hintY = FirstRow + RowHeight * Menu.Length + 2;
+            if (IsKeyboardFocused) text.Draw(dc, "UP / DOWN + SPACE", Center, hintY, 8, ArcadePalette.White, TextAlign.Center);
+            else text.Draw(dc, "CLICK TO PLAY", Center, hintY, 9, ArcadePalette.Yellow, TextAlign.Center);
+
+            if (demo != null) demo.DrawScroller(dc, text);
         }
     }
 

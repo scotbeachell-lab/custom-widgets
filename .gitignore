@@ -5,3 +5,6 @@
 state.ini
 notes/
 error.log
+
+# Art for the arcade demo, which comes from a third-party pack and is not ours to redistribute
+assets/

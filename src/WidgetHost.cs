@@ -1258,6 +1258,7 @@ namespace CustomWidgets
 
         public static void Log(string message)
         {
+            if (baseDir == null) return; // nothing to log to before the host starts
             try { File.AppendAllText(System.IO.Path.Combine(baseDir, "error.log"), DateTime.Now.ToString("s") + " " + message + Environment.NewLine); }
             catch (IOException) { }
         }

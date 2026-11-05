@@ -104,6 +104,14 @@ so an idle arcade uses no CPU. High scores are saved in `state.ini`.
   at about 150 km/h. A qualifying lap sets your place on the grid, then you race seven rivals over three laps.
   Finishing a lap adds time, and hitting a car or a roadside sign costs you speed and time.
 
+The game list has a demo running behind it: stars, drifting items, a wave of coins and a text scroller. It
+moves while the mouse is over the arcade or it has your keyboard, and stands still otherwise so that it doesn't
+use CPU. To change that, exit from the tray and add `arcade.demo=always` or `arcade.demo=off` to `state.ini`.
+
+The demo's art isn't in this repository, and it shows simple shapes without it. To use the art, get
+[Super Pixel Objects and Items](https://untiedgames.com) by unTied Games, then copy `spritesheet.png` and
+`spritesheet.txt` from its `spritesheet` folder into `assets\arcade`, which Git ignores.
+
 To change its size, edit `Width` and `Height` in the XAML; keep a 4:3 ratio, and whole multiples of 200 by
 150 keep the pixels even. To stop it sitting on top, right-click it and choose a different layer. Drag the
 top bar to move it.
